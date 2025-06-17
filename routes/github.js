@@ -13,7 +13,12 @@ router.get('/commits/:repo', async (req, res) => {
     const now = Date.now();
 
     if(cachedRes && (now - cacheTimestamp) < cacheDuration) {
-        return res.json(cachedRes);
+        const cacheAge = now - cacheTimestamp;
+
+        return res.json({
+            cacheAge: Math.floor(cacheAge / 1000),
+            commits: cachedRes
+        });
     }
 
     const response = await fetch(`https://api.github.com/repos/${username}/${repo}/commits`);
@@ -27,7 +32,10 @@ router.get('/commits/:repo', async (req, res) => {
     cachedRes = data;
     cacheTimestamp = now;
 
-    res.json(data);
+    res.json({
+        cacheAge: 0,
+        commits: data
+    });
 })
 
 module.exports = router;
