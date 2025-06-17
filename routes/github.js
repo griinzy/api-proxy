@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const cacheDuration = 1800000; // 30 minutes
+const cacheDuration = 1800000; // 30 minutes - saving the results so it only calls the api if more than 30 minutes have passed since the last update.
 let cachedRes;
 let cacheTimestamp = 0;
 
